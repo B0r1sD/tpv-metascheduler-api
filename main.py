@@ -13,7 +13,7 @@ class ObjectStoreInfo(BaseModel):
     longitude: float
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "latitude": 50.0689816,
                 "longitude": 19.9070188
@@ -26,7 +26,7 @@ class DatasetInfo(BaseModel):
     size: float
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "object_store_id": "object_store_australia",
                 "size": 1073741824000.0
@@ -41,7 +41,7 @@ class JobInfo(BaseModel):
     gpus: int
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "tool_id": "trinity",
                 "mem": 8,
@@ -59,7 +59,7 @@ class DestinationInfo(BaseModel):
     running_job_count: int
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "id": "pulsar_italy",
                 "latitude": 50.0689816,
@@ -77,7 +77,7 @@ class RequestModel(BaseModel):
     current_dest_info: List[DestinationInfo]
 
     class Config:
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "static_objectstores_info": {
                     "object_store_australia": {"latitude": -26.4390917, "longitude": 133.281323}
@@ -141,7 +141,10 @@ queries = [
     "SELECT * FROM \"cluster.alloc\" WHERE host = 'vgcn-pulsar-central-manager.usegalaxy.be' ORDER BY time DESC LIMIT 10",
 ]
 # Initialize the InfluxDB client
-client = InfluxDBClient(host="test.usegalaxy.be", port=59886, database='telegraf', ssl=True)
+try: 
+    client = InfluxDBClient(host="test.usegalaxy.be", port=59886, database='telegraf', ssl=True)
+except Exception as e:
+    print(e)
 
 def parse_results(results):
     for key, value in results.items():
